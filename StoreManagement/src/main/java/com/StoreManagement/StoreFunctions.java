@@ -202,6 +202,8 @@ Scanner sc = new Scanner(System.in);
 					break;
 				case 2:
 					ct.viewCart();
+					System.out.println("\n \n .....Viewing Items.....\n \n");
+					viewItems();
 					break;
 				case 3:
 					ct.deleteFromCart();
@@ -212,11 +214,9 @@ Scanner sc = new Scanner(System.in);
 				default:
 					System.out.println("Enter valid choice: ");
 			}
-			System.out.println("Do you wish to continue: y/n");
+			System.out.println("Logout : y/n : ");
 			loop = sc.next();
 		}		
-		System.out.println("\n \n .....Viewing Items.....\n \n");
-		viewItems();
 	}
 
 	private void adminDashboard() throws IOException {
@@ -254,7 +254,7 @@ Scanner sc = new Scanner(System.in);
 				default:
 					System.out.println("Enter valid choice: ");
 			}
-			System.out.println("Do you wish to continue: y/n");
+			System.out.println("Logout : y/n : ");
 			loop = sc.next();
 		}		
 	}
