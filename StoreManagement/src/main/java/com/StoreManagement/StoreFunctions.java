@@ -6,7 +6,7 @@ import java.util.Properties;
 public class StoreFunctions {
 	
 Scanner sc = new Scanner(System.in);
-AdminDashboard ad = new AdminDashboard();
+
 
 	public Connection getMySQLConnection() throws IOException
 	{
@@ -182,7 +182,7 @@ AdminDashboard ad = new AdminDashboard();
 	
 	}
 
-	public  void userDashboard() throws IOException {
+	private void userDashboard() throws IOException {
 		// TODO Auto-generated method stub
 		System.out.println("1. Add items to cart");
 		System.out.println("2. View items in cart");
@@ -204,7 +204,7 @@ AdminDashboard ad = new AdminDashboard();
 				case 2:
 					ct.viewCart();
 					System.out.println("\n \n .....Viewing Items.....\n \n");
-					ad.viewItems();
+					viewItems();
 					break;
 				case 3:
 					ct.deleteFromCart();
@@ -220,9 +220,9 @@ AdminDashboard ad = new AdminDashboard();
 		}		
 	}
 
-	public void adminDashboard() throws IOException {
+	private void adminDashboard() throws IOException {
 		// TODO Auto-generated method stub
-		
+
 		System.out.println("1. Add items to store");
 		System.out.println("2. View items in store");
 		System.out.println("3. Remove items from store");
@@ -238,19 +238,19 @@ AdminDashboard ad = new AdminDashboard();
 			switch(a) 
 			{
 				case 1:
-					ad.addItems();
+					addItems();
 					break;
 				case 2:
-					ad.viewItems();
+					viewItems();
 					break;
 				case 3:
-					ad.deleteItems();
+					deleteItems();
 					break;
 				case 4:
-					ad.updateItems();
+					updateItems();
 					break;
 				case 5:
-					ad.viewUser();
+					viewUser();
 					break;
 				default:
 					System.out.println("Enter valid choice: ");
@@ -260,5 +260,175 @@ AdminDashboard ad = new AdminDashboard();
 		}		
 	}
 
+	private void viewUser() throws IOException
+	{
+		// TODO Auto-generated method stub
+		Connection con = getMySQLConnection();
+		String q1 = "select * from regdetails; ";
+		PreparedStatement stmt;
+		try 
+		{
+			stmt = con.prepareStatement(q1);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next())
+			{
+				System.out.println("Username    |    Role");
+				System.out.println(rs.getString(1)+" "+rs.getString(3));
+			}
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+	}
+
+	public void addItems() throws IOException
+	{
+		// TODO Auto-generated method stub
+		Connection con = getMySQLConnection();
+		String q1 = "insert into items(itemId,itemName,itemQty) values(?,?,?) ";
+		PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(q1);
+			
+			System.out.println("Enter ID: ");
+			int id = sc.nextInt();
+			
+			System.out.println("Enter Name: ");
+			String name = sc.next();
+			
+			System.out.println("Enter Quantity: ");
+			int qty = sc.nextInt();
+			
+			
+			stmt.setInt(1, id);
+			stmt.setString(2, name);
+			stmt.setInt(3, qty);
+			
+			stmt.executeUpdate();
+			
+			System.out.println("Items Inserted.......");
+			System.out.println("Add More items? (y/n): ");
+			String more = sc.next();
+			if(more.equals("y"))
+			{
+				addItems();
+			}
+			else
+			{
+				adminDashboard();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+
+	public void viewItems() throws IOException
+	{
+		// TODO Auto-generated method stub
+		Connection con = getMySQLConnection();
+		String q1 = "select * from items; ";
+		PreparedStatement stmt;
+		try 
+		{
+			stmt = con.prepareStatement(q1);
+			ResultSet rs = stmt.executeQuery();
+			System.out.println("item ID |  item Name    |    Qty");
+			while(rs.next())
+			{
+				System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
+			}
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteItems() throws IOException
+	{
+		// TODO Auto-generated method stub
+		Connection con = getMySQLConnection();
+		String q1 = "delete from items where itemId=? ";
+		PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(q1);
+			
+			System.out.println("Enter ID: ");
+			int id = sc.nextInt();
+			
+			
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+			
+			System.out.println("Items Deleted.......");
+			System.out.println("Delete More items? (y/n): ");
+			String more = sc.next();
+			if(more.equals("y"))
+			{
+				deleteItems();
+			}
+			else
+			{
+				adminDashboard();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void updateItems() throws IOException
+	{
+		// TODO Auto-generated method stub
+		Connection con = getMySQLConnection();
+		String q1 = "update items set itemId = ?,itemName = ?,itemQty=? where itemId=? ";
+		PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(q1);
+			
+			System.out.println("Enter ID: ");
+			int id = sc.nextInt();
+			
+			System.out.println("Enter new ID: ");
+			int newId = sc.nextInt();
+			
+			System.out.println("Enter new item Name:");
+			String newName = sc.next();
+			
+			System.out.println("Enter new item Name:");
+			int newQty = sc.nextInt();
+			
+			stmt.setInt(1, newId);
+			stmt.setString(2, newName);
+			stmt.setInt(3, newQty);
+			stmt.setInt(4, id);
+			stmt.executeUpdate();
+			
+			System.out.println("Items Updated.......");
+			System.out.println("Update More items? (y/n): ");
+			String more = sc.next();
+			if(more.equals("y"))
+			{
+				updateItems();
+			}
+			else
+			{
+				adminDashboard();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 }
