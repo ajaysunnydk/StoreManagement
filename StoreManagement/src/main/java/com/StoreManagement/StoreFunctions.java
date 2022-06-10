@@ -313,6 +313,7 @@ Scanner sc = new Scanner(System.in);
 			stmt.executeUpdate();
 			
 			System.out.println("Items Inserted.......");
+			//System.out.println("Items Inserted.......");
 			System.out.println("Add More items? (y/n): ");
 			String more = sc.next();
 			if(more.equals("y"))
