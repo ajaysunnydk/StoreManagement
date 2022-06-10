@@ -183,7 +183,38 @@ Scanner sc = new Scanner(System.in);
 
 	private void userDashboard() throws IOException {
 		// TODO Auto-generated method stub
+		System.out.println("1. Add items to cart");
+		System.out.println("2. View items in cart");
+		System.out.println("3. Remove items from cart");
+		System.out.println("4. Update items in cart");
+		System.out.println("\n Enter your choice: ");
+	
+		Cart ct = new Cart();
 		
+		int a = sc.nextInt();
+		String loop="y";
+		while(loop.equals("y"))
+		{
+			switch(a) 
+			{
+				case 1:
+					ct.addToCart();
+					break;
+				case 2:
+					ct.viewCart();
+					break;
+				case 3:
+					ct.deleteFromCart();
+					break;
+				case 4:
+					ct.updateCart();
+					break;
+				default:
+					System.out.println("Enter valid choice: ");
+			}
+			System.out.println("Do you wish to continue: y/n");
+			loop = sc.next();
+		}		
 		System.out.println("\n \n .....Viewing Items.....\n \n");
 		viewItems();
 	}
