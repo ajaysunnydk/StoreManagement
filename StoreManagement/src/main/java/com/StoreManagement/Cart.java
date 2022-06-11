@@ -38,7 +38,7 @@ public class Cart {
 		Connection con;
 		try {
 			con = getMySQLConnection();
-			String q1 = "insert into items(itemId,itemName,itemQty) values(?,?,?) ";
+			String q1 = "insert into cart(cartId,itemId,itemName,itemQty) values(?,?,?,?)";
 			PreparedStatement stmt;
 			Scanner sc = new Scanner(System.in);
 			try {
