@@ -182,7 +182,7 @@ Scanner sc = new Scanner(System.in);
 	
 	}
 
-	private void userDashboard() throws IOException {
+	public void userDashboard() throws IOException {
 		// TODO Auto-generated method stub
 		System.out.println("1. Add items to cart");
 		System.out.println("2. View items in cart");
@@ -220,7 +220,7 @@ Scanner sc = new Scanner(System.in);
 		}		
 	}
 
-	private void adminDashboard() throws IOException {
+	public void adminDashboard() throws IOException {
 		// TODO Auto-generated method stub
 
 		System.out.println("1. Add items to store");
@@ -260,7 +260,7 @@ Scanner sc = new Scanner(System.in);
 		}		
 	}
 
-	private void viewUser() throws IOException
+	public void viewUser() throws IOException
 	{
 		// TODO Auto-generated method stub
 		Connection con = getMySQLConnection();
