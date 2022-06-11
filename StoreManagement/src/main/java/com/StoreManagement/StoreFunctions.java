@@ -335,6 +335,9 @@ Scanner sc = new Scanner(System.in);
 	{
 		// TODO Auto-generated method stub
 		Connection con = getMySQLConnection();
+		DBTablePrinter.printTable(con, "items");
+		adminDashboard();
+		/*
 		String q1 = "select * from items; ";
 		PreparedStatement stmt;
 		try 
@@ -352,6 +355,7 @@ Scanner sc = new Scanner(System.in);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public void deleteItems() throws IOException
@@ -371,6 +375,8 @@ Scanner sc = new Scanner(System.in);
 			stmt.executeUpdate();
 			
 			System.out.println("Items Deleted.......");
+			DBTablePrinter.printTable(con, "items");
+			
 			System.out.println("Delete More items? (y/n): ");
 			String more = sc.next();
 			if(more.equals("y"))
@@ -391,30 +397,25 @@ Scanner sc = new Scanner(System.in);
 	{
 		// TODO Auto-generated method stub
 		Connection con = getMySQLConnection();
-		String q1 = "update items set itemId = ?,itemName = ?,itemQty=? where itemId=? ";
+		String q1 = "update items set itemQty=? where itemId=? ";
 		PreparedStatement stmt;
 		try {
 			stmt = con.prepareStatement(q1);
+			DBTablePrinter.printTable(con, "items");
 			
 			System.out.println("Enter ID: ");
 			int id = sc.nextInt();
 			
-			System.out.println("Enter new ID: ");
-			int newId = sc.nextInt();
 			
-			System.out.println("Enter new item Name:");
-			String newName = sc.next();
-			
-			System.out.println("Enter new item Name:");
+			System.out.println("Enter new item Qty:");
 			int newQty = sc.nextInt();
 			
-			stmt.setInt(1, newId);
-			stmt.setString(2, newName);
-			stmt.setInt(3, newQty);
-			stmt.setInt(4, id);
+			stmt.setInt(1, newQty);
+			stmt.setInt(2, id);
 			stmt.executeUpdate();
 			
 			System.out.println("Items Updated.......");
+			DBTablePrinter.printTable(con, "items");
 			System.out.println("Update More items? (y/n): ");
 			String more = sc.next();
 			if(more.equals("y"))
