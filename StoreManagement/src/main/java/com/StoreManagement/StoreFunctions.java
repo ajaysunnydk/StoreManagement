@@ -69,7 +69,8 @@ Scanner sc = new Scanner(System.in);
 			e.printStackTrace();
 		}
 	}
-	String existingRole = null;
+	static String existingRole = null;
+	static String loginUname = null;
 	public String login() throws IOException
 	{
 		// TODO Auto-generated method stub
@@ -95,11 +96,11 @@ Scanner sc = new Scanner(System.in);
 			{
 				
 				existingRole  = rs.getString(3);
-				
-				
-				
+
 				System.out.println("************************************");
 				System.out.println("***********Login Success************");
+				
+				loginUname = uname ;
 				
 				if(existingRole.equals("admin"))
 				{
@@ -193,6 +194,7 @@ Scanner sc = new Scanner(System.in);
 		System.out.println("\n Enter your choice: ");
 
 		
+		
 		int a = sc.nextInt();
 		String loop="y";
 		while(loop.equals("y"))
@@ -223,7 +225,7 @@ Scanner sc = new Scanner(System.in);
 
 	public void adminDashboard() throws IOException {
 		// TODO Auto-generated method stub
-
+		
 		System.out.println("1. Add items to store");
 		System.out.println("2. View items in store");
 		System.out.println("3. Remove items from store");
