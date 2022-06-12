@@ -6,7 +6,8 @@ import java.util.Properties;
 public class StoreFunctions {
 	
 Scanner sc = new Scanner(System.in);
-
+static String existingRole = null;
+static String loginUname = null;
 
 	public Connection getMySQLConnection() throws IOException
 	{
@@ -69,8 +70,7 @@ Scanner sc = new Scanner(System.in);
 			e.printStackTrace();
 		}
 	}
-	static String existingRole = null;
-	static String loginUname = null;
+
 	public String login() throws IOException
 	{
 		// TODO Auto-generated method stub
@@ -444,52 +444,50 @@ Scanner sc = new Scanner(System.in);
 		Connection con;
 		try {
 			con = getMySQLConnection();
-			String q1 = "insert into cart(cartId,itemId,itemName,itemQty,uname) values(?,?,?,?,?)";
+			DBTablePrinter.printTable(con, "items");
+			String q0 = "select * from items where itemId = ?";
+			String q1 = "insert into cart(itemId,itemName,itemQty,uname) values(?,?,?,?)";
+			
 			PreparedStatement stmt;
 			Scanner sc = new Scanner(System.in);
 			try {
-				stmt = con.prepareStatement(q1);
-				
 				System.out.println("Enter Item Id: ");
 				int id = sc.nextInt();
-				
-				//System.out.println("Enter Name: ");
-				//String name = sc.next();
-				
-				
-				
 				System.out.println("Enter Quantity: ");
 				int qty = sc.nextInt();
 				
-				
-
-				
-				
-				
-				
-				
-				
-				
-				
+				stmt = con.prepareStatement(q0);
 				stmt.setInt(1, id);
-				//stmt.setString(2, name);
-				stmt.setInt(3, qty);
-				
-				stmt.executeUpdate();
-				
-				System.out.println("Items Inserted.......");
-				//System.out.println("Items Inserted.......");
-				System.out.println("Add More items? (y/n): ");
-				String more = sc.next();
-				if(more.equals("y"))
+				ResultSet rs = stmt.executeQuery();
+				String name = rs.getString(2);
+				/*	if(rs.next())
 				{
-					addToCart();
+					stmt = con.prepareStatement(q1);
+					stmt.setInt(1, id);
+					stmt.setInt(3, qty);
+					stmt.setString(2,name);
+					stmt.setString(4, loginUname);
+					
+					stmt.executeUpdate();
+					
+					System.out.println("Items Added to cart.......");
+					System.out.println("Add More items? (y/n): ");
+					String more = sc.next();
+					if(more.equals("y"))
+					{
+						addToCart();
+					}
+					else
+					{
+						userDashboard();
+					}
 				}
 				else
 				{
-					StoreFunctions storeFunctions = new StoreFunctions();
-					storeFunctions.userDashboard();
-				}
+					System.out.println("Invalid item ID....");
+					System.out.println("Try Again..........");
+					addToCart();
+				}	*/	
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
