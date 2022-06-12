@@ -447,7 +447,7 @@ static String loginUname = null;
 			DBTablePrinter.printTable(con, "items");
 			String q0 = "select * from items where itemId = ?";
 			String q1 = "insert into cart(itemId,itemName,itemQty,uname) values(?,?,?,?)";
-			
+			String q2 = "update items set itemQty = ? where itemId= ? ";
 			PreparedStatement stmt;
 			Scanner sc = new Scanner(System.in);
 			try {
@@ -456,20 +456,28 @@ static String loginUname = null;
 				System.out.println("Enter Quantity: ");
 				int qty = sc.nextInt();
 				
+				
+				
 				stmt = con.prepareStatement(q0);
 				stmt.setInt(1, id);
 				ResultSet rs = stmt.executeQuery();
-
+				String nameRetrieved =  rs.getString(2);
+				int qtyRetrieved = rs.getInt(3);
+				qtyRetrieved -= qty;
+				
 				if(rs.next())
 				{
 					stmt = con.prepareStatement(q1);
 					stmt.setInt(1, id);
 					stmt.setInt(3, qty);
-					stmt.setString(2,rs.getString(2));
+					stmt.setString(2,nameRetrieved);
 					stmt.setString(4, loginUname);
 					
 					stmt.executeUpdate();
 					
+					stmt = con.prepareStatement(q2);
+					stmt.setInt(1, qtyRetrieved);
+					stmt.setInt(2, id);
 					System.out.println("Items Added to cart.......");
 					System.out.println("Add More items? (y/n): ");
 					String more = sc.next();
