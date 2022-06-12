@@ -459,13 +459,13 @@ static String loginUname = null;
 				stmt = con.prepareStatement(q0);
 				stmt.setInt(1, id);
 				ResultSet rs = stmt.executeQuery();
-				String name = rs.getString(2);
-				/*	if(rs.next())
+
+				if(rs.next())
 				{
 					stmt = con.prepareStatement(q1);
 					stmt.setInt(1, id);
 					stmt.setInt(3, qty);
-					stmt.setString(2,name);
+					stmt.setString(2,rs.getString(2));
 					stmt.setString(4, loginUname);
 					
 					stmt.executeUpdate();
@@ -487,7 +487,7 @@ static String loginUname = null;
 					System.out.println("Invalid item ID....");
 					System.out.println("Try Again..........");
 					addToCart();
-				}	*/	
+				}	
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
