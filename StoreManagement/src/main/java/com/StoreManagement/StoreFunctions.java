@@ -207,7 +207,7 @@ static String loginUname = null;
 				case 2:
 					viewCart();
 					System.out.println("\n \n .....Viewing Items.....\n \n");
-					viewItems();
+					viewCart();
 					break;
 				case 3:
 					deleteFromCart();
@@ -500,9 +500,11 @@ static String loginUname = null;
 		
 	}
 
-	public void viewCart() {
+	public void viewCart() throws IOException {
 		// TODO Auto-generated method stub
-		
+		Connection con = getMySQLConnection();
+		DBTablePrinter.printTable(con, "cart");
+		userDashboard();
 	}
 
 	public void deleteFromCart() {
