@@ -522,7 +522,32 @@ static String loginUname = null;
 
 	public void updateCart() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Enter item ID: ");
+		int id = sc.nextInt();
+		System.out.println("Enter new Quantity: ");
+		int qty = sc.nextInt();
+		Connection con;
+		try {
+			con = getMySQLConnection();
+			try {
+				CallableStatement cstmt = con.prepareCall("{call updateQty(?,?)}");
+				cstmt.setInt(1, id);
+				cstmt.setInt(2, qty);
+				System.out.println();
+				
+				cstmt.execute();
+				System.out.println(" Cart updated");
+				
+				DBTablePrinter.printTable(con, "cart");
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
