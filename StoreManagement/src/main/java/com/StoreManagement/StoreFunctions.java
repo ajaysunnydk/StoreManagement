@@ -448,6 +448,8 @@ static String loginUname = null;
 			String q0 = "select * from items where itemId = ?";
 			String q1 = "insert into cart(itemId,itemName,itemQty,uname) values(?,?,?,?)";
 			String q2 = "update items set itemQty = ? where itemId= ? ";
+			String q3 = "select * from cart where itemId = ?";
+			String q4 = "update cart set itemQty = ? where itemId = ?";
 			PreparedStatement stmt;
 			Scanner sc = new Scanner(System.in);
 			try {
@@ -465,37 +467,53 @@ static String loginUname = null;
 				int qtyRetrieved = rs.getInt(3);
 				qtyRetrieved -= qty;
 				
-				if(rs.next())
+				stmt = con.prepareStatement(q3);
+				stmt.setInt(1, id);
+				ResultSet rs1 = stmt.executeQuery();
+				
+				if(rs1.next())
 				{
-					stmt = con.prepareStatement(q1);
-					stmt.setInt(1, id);
-					stmt.setInt(3, qty);
-					stmt.setString(2,nameRetrieved);
-					stmt.setString(4, loginUname);
-					
-					stmt.executeUpdate();
-					
-					stmt = con.prepareStatement(q2);
-					stmt.setInt(1, qtyRetrieved);
+					stmt = con.prepareStatement(q4);
+					stmt.setInt(1, qty);
 					stmt.setInt(2, id);
-					System.out.println("Items Added to cart.......");
-					System.out.println("Add More items? (y/n): ");
-					String more = sc.next();
-					if(more.equals("y"))
-					{
-						addToCart();
-					}
-					else
-					{
-						userDashboard();
-					}
+					stmt.executeUpdate();
 				}
 				else
 				{
-					System.out.println("Invalid item ID....");
-					System.out.println("Try Again..........");
-					addToCart();
-				}	
+					if(rs.next())
+					{
+						stmt.close();
+						stmt = con.prepareStatement(q1);
+						stmt.setInt(1, id);
+						stmt.setInt(3, qty);
+						stmt.setString(2,nameRetrieved);
+						stmt.setString(4, loginUname);
+						
+						stmt.executeUpdate();
+						
+						stmt = con.prepareStatement(q2);
+						stmt.setInt(1, qtyRetrieved);
+						stmt.setInt(2, id);
+						System.out.println("Items Added to cart.......");
+						System.out.println("Add More items? (y/n): ");
+						String more = sc.next();
+						if(more.equals("y"))
+						{
+							addToCart();
+						}
+						else
+						{
+							userDashboard();
+						}
+					}
+					else
+					{
+						System.out.println("Invalid item ID....");
+						System.out.println("Try Again..........");
+						addToCart();
+					}
+				}
+					
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
