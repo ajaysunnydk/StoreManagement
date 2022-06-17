@@ -440,7 +440,7 @@ static String loginUname = null;
 	
 	
 	public void addToCart() {
-		// TODO Auto-generated method stub
+//		 TODO Auto-generated method stub
 		Connection con;
 		try {
 			con = getMySQLConnection();
@@ -448,8 +448,6 @@ static String loginUname = null;
 			String q0 = "select * from items where itemId = ?";
 			String q1 = "insert into cart(itemId,itemName,itemQty,uname) values(?,?,?,?)";
 			String q2 = "update items set itemQty = ? where itemId= ? ";
-			String q3 = "select * from cart where itemId = ?";
-			String q4 = "update cart set itemQty = ? where itemId = ?";
 			PreparedStatement stmt;
 			Scanner sc = new Scanner(System.in);
 			try {
@@ -463,55 +461,43 @@ static String loginUname = null;
 				stmt = con.prepareStatement(q0);
 				stmt.setInt(1, id);
 				ResultSet rs = stmt.executeQuery();
+				
+				rs.next();
 				String nameRetrieved =  rs.getString(2);
 				int qtyRetrieved = rs.getInt(3);
 				qtyRetrieved -= qty;
 				
-				stmt = con.prepareStatement(q3);
-				stmt.setInt(1, id);
-				ResultSet rs1 = stmt.executeQuery();
 				
-				if(rs1.next())
+				
+				if(qty>qtyRetrieved)
 				{
-					stmt = con.prepareStatement(q4);
-					stmt.setInt(1, qty);
-					stmt.setInt(2, id);
+					stmt = con.prepareStatement(q1);
+					stmt.setInt(1, id);
+					stmt.setInt(3, qty);
+					stmt.setString(2,nameRetrieved);
+					stmt.setString(4, loginUname);
+					
 					stmt.executeUpdate();
-				}
-				else
-				{
-					if(rs.next())
+
+					stmt = con.prepareStatement(q2);
+					stmt.setInt(1, qtyRetrieved);
+					stmt.setInt(2, id);
+					System.out.println("Items Added to cart.......");
+					System.out.println("Add More items? (y/n): ");
+					String more = sc.next();
+					if(more.equals("y"))
 					{
-						stmt.close();
-						stmt = con.prepareStatement(q1);
-						stmt.setInt(1, id);
-						stmt.setInt(3, qty);
-						stmt.setString(2,nameRetrieved);
-						stmt.setString(4, loginUname);
-						
-						stmt.executeUpdate();
-						
-						stmt = con.prepareStatement(q2);
-						stmt.setInt(1, qtyRetrieved);
-						stmt.setInt(2, id);
-						System.out.println("Items Added to cart.......");
-						System.out.println("Add More items? (y/n): ");
-						String more = sc.next();
-						if(more.equals("y"))
-						{
-							addToCart();
-						}
-						else
-						{
-							userDashboard();
-						}
+						addToCart();
 					}
 					else
 					{
-						System.out.println("Invalid item ID....");
-						System.out.println("Try Again..........");
-						addToCart();
+						userDashboard();
 					}
+				}
+				else
+				{
+					System.out.println("Out of Stock");
+					System.out.println("Enter quantity less than "+qtyRetrieved);
 				}
 					
 			} catch (SQLException e) {
@@ -529,8 +515,22 @@ static String loginUname = null;
 	public void viewCart() throws IOException {
 		// TODO Auto-generated method stub
 		Connection con = getMySQLConnection();
-		DBTablePrinter.printTable(con, "cart");
-		userDashboard();
+		String q0 = "select  itemName, itemQty from cart where uname = ?";
+		PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(q0);
+			stmt.setString(1, loginUname);
+			ResultSet rs = stmt.executeQuery();
+			
+			DBTablePrinter.printResultSet(rs);
+			userDashboard();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteFromCart() {
